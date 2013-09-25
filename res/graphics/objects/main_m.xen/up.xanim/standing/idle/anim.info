@@ -1,0 +1,15 @@
+
+ixxFile {
+	version = 4;
+}
+
+animation {
+	imageCount = 20;
+	fps = 10;
+	startFrame = 0;
+}
+
+sprite {
+	width = 32;
+	height = 32;
+}
