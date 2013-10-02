@@ -49,7 +49,7 @@ public class EnemyEntity extends BaseEntity {
 			timeSinceLastPath += delta;
 			if(timeSinceLastPath > 3 * 1000){
 				timeSinceLastPath = 0;
-				level.add(new Coordinates(level.getEngine(), "{" + level.getPathCorrectedTileX(findTile().x) + "|" + level.getPathCorrectedTileY(findTile().y) + "}", (int) x, (int) y));
+				//level.add(new Coordinates(level.getEngine(), "{" + level.getPathCorrectedTileX(findTile().x) + "|" + level.getPathCorrectedTileY(findTile().y) + "}", (int) x, (int) y));
 				if(Math.abs(target.x - x) < level.getLoadingRadiusX() * Engine.SPRITE_SIZE && Math.abs(target.y - y) < level.getLoadingRadiusY() * Engine.SPRITE_SIZE ){
 					path = pathFinder.findPath(this, level.getPathCorrectedTileX(start.x), level.getPathCorrectedTileY(start.y), level.getPathCorrectedTileX(goal.x), level.getPathCorrectedTileY(goal.y));
 				}
@@ -58,17 +58,28 @@ public class EnemyEntity extends BaseEntity {
 			if(lastPath != null){
 
 				for(int i = 0; i < lastPath.getLength(); i++){
-					level.tiles.getTile(level.getPathOriginalTileX(lastPath.getStep(0).getX()), level.getPathOriginalTileY(lastPath.getStep(0).getY())).isHighligthed = false;
+					level.tiles.getTile(level.getPathOriginalTileX(lastPath.getStep(i).getX()), level.getPathOriginalTileY(lastPath.getStep(i).getY())).isHighligthed = false;
 				}
 			}
 			if(path != null){
-				Log.debug(path.getLength() + "");
-				setMovement((float) (level.getPathOriginalTileX(path.getStep(0).getX()) * Engine.SPRITE_SIZE - this.x), (float) (level.getPathOriginalTileY(path.getStep(0).getY()) * Engine.SPRITE_SIZE - this.y));
-				Log.debug("start path");
-				for(int i = 0; i < path.getLength(); i++){
-					level.tiles.getTile(level.getPathOriginalTileX(path.getStep(0).getX()), level.getPathOriginalTileY(path.getStep(0).getY())).isHighligthed = true;
-					Log.debug("->[" + level.getPathOriginalTileX(path.getStep(0).getX()) + "|" + level.getPathOriginalTileY(path.getStep(0).getY()) + "]");
+				if(path.contains(level.getPathCorrectedTileX(start.x), level.getPathCorrectedTileY(start.y))){
+					for(int i = 0; i < path.getLength() - 1; i++){
+						if(level.getPathOriginalTileX(path.getStep(i).getX()) == start.x && level.getPathOriginalTileY(path.getStep(i).getY()) == start.y){
+							setMovement((float) (level.getPathOriginalTileX(path.getStep(i + 1).getX()) * Engine.SPRITE_SIZE - this.x), (float) (level.getPathOriginalTileY(path.getStep(i + 1).getY()) * Engine.SPRITE_SIZE - this.y));
+
+						}
+					}
+				} else {
+					setMovement((float) (level.getPathOriginalTileX(path.getStep(0).getX()) * Engine.SPRITE_SIZE - this.x), (float) (level.getPathOriginalTileY(path.getStep(0).getY()) * Engine.SPRITE_SIZE - this.y));
 				}
+				//Log.debug("start path from [" + start.x + "|" + start.y + "] to [" + goal.x + "|" + goal.y + "]");
+				for(int i = 0; i < path.getLength(); i++){
+					//level.tiles.getTile(level.getPathOriginalTileX(path.getStep(i).getX()), level.getPathOriginalTileY(path.getStep(i).getY())).isHighligthed = true;
+					//Log.debug("->[" + level.getPathOriginalTileX(path.getStep(i).getX()) + "|" + level.getPathOriginalTileY(path.getStep(i).getY()) + "]");
+				}
+			}
+			if(start.x == goal.x && start.y == goal.y){
+				setMovement(0,0);
 			}
 		}
 

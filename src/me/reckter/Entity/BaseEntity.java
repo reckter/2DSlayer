@@ -104,10 +104,7 @@ public class BaseEntity implements Mover{
 	 */
 	public void setMovement(float x, float y){
 		movement.set(x, y);
-		Log.debug(x + ", " + y);
 		movement.normalise();
-
-		Log.debug("normalized:" +  movement.x + ", " + movement.y);
 	}
 
 	/**
@@ -207,7 +204,7 @@ public class BaseEntity implements Mover{
 	 * @param killer the entity that dealt the last dmg
 	 */
 	public void onDeath(BaseEntity killer){
-		Log.verbose("An Entity just died!");
+		Log.verbose(this.getClass().getCanonicalName() + " just died!");
 	}
 
 

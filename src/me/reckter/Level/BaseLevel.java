@@ -37,13 +37,15 @@ public class BaseLevel implements TileBasedMap{
 
 	protected int updates;
 
-	protected ArrayList<BaseEntity> entities;
-	protected ArrayList<BaseInterface> interfaces;
+	protected int timeSinceLastSpawn;
+
+	public ArrayList<BaseEntity> entities;
+	public ArrayList<BaseInterface> interfaces;
 
 	public BaseLevel(Engine engine){
 		this.engine = engine;
 		updates = 0;
-
+		timeSinceLastSpawn = 0;
 		entities = new ArrayList<BaseEntity>();
 		interfaces = new ArrayList<BaseInterface>();
 	}
@@ -54,12 +56,14 @@ public class BaseLevel implements TileBasedMap{
 		this.loadingRadiusX = (Engine.SCREEN_WIDTH / Engine.SPRITE_SIZE) / 2 + 2;
 		this.loadingRadiusY = (Engine.SCREEN_HEIGHT / Engine.SPRITE_SIZE) / 2 + 2;
 
+		random = new Random(5);
+
 		tiles = new TilesHandler(generation, this);
 		tiles.manageTiles(0, 0, loadingRadiusX, loadingRadiusY);
 	}
 
 	public void init() throws IOException {
-		this.add(new EnemyEntity(this, 1000, 50));
+		this.add(new EnemyEntity(this, 500, 50));
 		this.add(new FPSlabel(engine));
 
 		for(BaseEntity ent: entities) {
@@ -84,9 +88,28 @@ public class BaseLevel implements TileBasedMap{
 		if(updates < 100){
 			updates = 0;
 		}
+
+		timeSinceLastSpawn += delta;
+		if(timeSinceLastSpawn > 1 * 1000){
+			timeSinceLastSpawn = 0;
+			BaseEntity enemy = new EnemyEntity(this, (int) engine.getPlayer().x + random.nextInt(200) - 100, (int) engine.getPlayer().y + random.nextInt(200) - 100);
+			try {
+				enemy.init();
+			} catch (IOException e) {
+				e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			}
+			add(enemy);
+		}
+
+
+		ArrayList<BaseEntity> entTempCpll = new ArrayList<BaseEntity>();
 		for(BaseEntity ent: entities) {
 			ent.update(delta);
+			if(ent.isDead()){
+				entTempCpll.add(ent);
+			}
 		}
+		entities.removeAll(entTempCpll);
 
 		for(int i = 0; i < entities.size(); i++){
 			for(int j = i; j < entities.size(); j++){
