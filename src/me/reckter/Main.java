@@ -17,6 +17,7 @@ import java.io.File;
 public class Main {
 	static public void main(String args[]) throws SlickException {
 		System.setProperty("org.lwjgl.librarypath", new File(new File(System.getProperty("user.dir"), "lib/native"), LWJGLUtil.getPlatformName()).getAbsolutePath());
+		Log.setConsoleLevel(Log.DEBUG);
 
 		Engine dsm = new Engine();
 

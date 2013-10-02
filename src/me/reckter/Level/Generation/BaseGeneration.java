@@ -11,7 +11,7 @@ import me.reckter.Level.Tiles.GrassTile;
  * Time: 2:33 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BasicGeneration {
+public class BaseGeneration {
 
 
 	public BaseTile generateTile(BaseLevel level, int x, int y){

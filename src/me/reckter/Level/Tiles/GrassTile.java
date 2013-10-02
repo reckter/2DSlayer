@@ -9,7 +9,7 @@ import me.reckter.Level.BaseLevel;
  * Time: 3:41 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GrassTile extends BaseTile {
+public class GrassTile extends PassableTile {
 
 	public GrassTile(BaseLevel level, int x, int y) {
 		super(level, x, y);

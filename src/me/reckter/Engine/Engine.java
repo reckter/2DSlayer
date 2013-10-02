@@ -3,7 +3,7 @@ package me.reckter.Engine;
 import com.ilusionary.IxxFile.IxxFile;
 import me.reckter.Entity.PlayerEntity;
 import me.reckter.Level.BaseLevel;
-import me.reckter.Level.Generation.BasicGeneration;
+import me.reckter.Level.Generation.BaseGeneration;
 import me.reckter.Log;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -12,6 +12,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -61,6 +62,18 @@ public class Engine extends BasicGame{
 		return camY;
 	}
 
+	public BaseLevel getLevel() {
+		return level;
+	}
+
+	/**
+	 * returns the player
+	 * @return object that holds the player entity
+	 */
+	public PlayerEntity getPlayer(){
+		return player;
+	}
+
 	/**
 	 * Load an image and keep the reference to it in RAM
 	 * If the same image is accessed again later, return the cached version instead of loading it again
@@ -69,6 +82,7 @@ public class Engine extends BasicGame{
 	 */
 	public Image loadImage(String path) {
 		path = "res/graphics/" + path;
+
 		File file = new File(path);
 
 		if(file.isDirectory()) {
@@ -134,19 +148,32 @@ public class Engine extends BasicGame{
 		images = new HashMap<String, Image>();
 		ixxFiles = new HashMap<String, IxxFile>();
 
-		level = new BaseLevel(this, new BasicGeneration(), 100);
+		level = new BaseLevel(this, new BaseGeneration());
+		player = new PlayerEntity(level);
+		level.spawnPlayer(player);
+
+		try{
+			level.init();
+		} catch (IOException e){
+			Log.error("IOException");
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public void update(GameContainer gameContainer, int delta) throws SlickException {
-		//To change body of implemented methods use File | Settings | File Templates.
+
+		player.updateInput(gameContainer.getInput());
+
 		level.logic(delta);
 	}
 
 	@Override
 	public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
-		graphics.translate(-camX, -camY);
+		camX = (int) - (player.x - SCREEN_WIDTH / 2);
+		camY = (int) - (player.y - SCREEN_HEIGHT / 2);
+		graphics.translate(camX, camY);
 		level.render(graphics);
 	}
 }
