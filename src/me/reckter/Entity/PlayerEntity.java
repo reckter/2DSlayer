@@ -2,6 +2,7 @@ package me.reckter.Entity;
 
 import me.reckter.Engine.Animation;
 import me.reckter.Engine.Engine;
+import me.reckter.Interface.HealthBar;
 import me.reckter.Level.BaseLevel;
 import me.reckter.Log;
 import org.newdawn.slick.Input;
@@ -21,8 +22,7 @@ public class PlayerEntity extends BaseEntity{
 	public boolean isCasting;
 
 	public PlayerEntity(BaseLevel level) {
-		super(level);
-
+        super(level);
 	}
 
 	@Override

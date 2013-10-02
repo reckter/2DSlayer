@@ -25,6 +25,7 @@ public class Main {
 
 		app.setShowFPS(false);
 		app.setDisplayMode(Engine.SCREEN_WIDTH, Engine.SCREEN_HEIGHT, false);
+        Log.verbose("Screen width: " +  app.getScreenWidth() + "Screen height: " + app.getScreenHeight());
 
 		app.start();
 

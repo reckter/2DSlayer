@@ -22,6 +22,6 @@ public class BaseHudItem extends BaseInterface {
 	@Override
 	public void render(Graphics g) {
 		x = fixedX - engine.getCamX();
-		y = fixedX - engine.getCamY();
+		y = fixedY - engine.getCamY();
 	}
 }

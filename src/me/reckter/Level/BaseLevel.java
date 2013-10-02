@@ -6,6 +6,7 @@ import me.reckter.Entity.EnemyEntity;
 import me.reckter.Entity.PlayerEntity;
 import me.reckter.Interface.BaseInterface;
 import me.reckter.Interface.FPSlabel;
+import me.reckter.Interface.HealthBar;
 import me.reckter.Level.Generation.BaseGeneration;
 import me.reckter.Level.Tiles.TilesHandler;
 import org.newdawn.slick.Graphics;
@@ -65,6 +66,7 @@ public class BaseLevel implements TileBasedMap{
 	public void init() throws IOException {
 		this.add(new EnemyEntity(this, 500, 50));
 		this.add(new FPSlabel(engine));
+        this.add(new HealthBar(engine));
 
 		for(BaseEntity ent: entities) {
 			ent.init();
@@ -89,7 +91,7 @@ public class BaseLevel implements TileBasedMap{
 			updates = 0;
 		}
 
-		timeSinceLastSpawn += delta;
+		//timeSinceLastSpawn += delta;
 		if(timeSinceLastSpawn > 1 * 1000){
 			timeSinceLastSpawn = 0;
 			BaseEntity enemy = new EnemyEntity(this, (int) engine.getPlayer().x + random.nextInt(200) - 100, (int) engine.getPlayer().y + random.nextInt(200) - 100);
@@ -105,7 +107,7 @@ public class BaseLevel implements TileBasedMap{
 		ArrayList<BaseEntity> entTempCpll = new ArrayList<BaseEntity>();
 		for(BaseEntity ent: entities) {
 			ent.update(delta);
-			if(ent.isDead()){
+			if(!ent.shouldBeLoaded()){
 				entTempCpll.add(ent);
 			}
 		}

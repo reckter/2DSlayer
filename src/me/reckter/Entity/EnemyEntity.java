@@ -49,10 +49,17 @@ public class EnemyEntity extends BaseEntity {
 			timeSinceLastPath += delta;
 			if(timeSinceLastPath > 3 * 1000){
 				timeSinceLastPath = 0;
-				//level.add(new Coordinates(level.getEngine(), "{" + level.getPathCorrectedTileX(findTile().x) + "|" + level.getPathCorrectedTileY(findTile().y) + "}", (int) x, (int) y));
-				if(Math.abs(target.x - x) < level.getLoadingRadiusX() * Engine.SPRITE_SIZE && Math.abs(target.y - y) < level.getLoadingRadiusY() * Engine.SPRITE_SIZE ){
-					path = pathFinder.findPath(this, level.getPathCorrectedTileX(start.x), level.getPathCorrectedTileY(start.y), level.getPathCorrectedTileX(goal.x), level.getPathCorrectedTileY(goal.y));
-				}
+
+                //level.add(new Coordinates(level.getEngine(), "{" + level.getPathCorrectedTileX(findTile().x) + "|" + level.getPathCorrectedTileY(findTile().y) + "}", (int) x, (int) y));
+
+                if(Math.abs(target.x - x) < level.getLoadingRadiusX() * Engine.SPRITE_SIZE && Math.abs(target.y - y) < level.getLoadingRadiusY() * Engine.SPRITE_SIZE ){
+					try {
+                        path = pathFinder.findPath(this, level.getPathCorrectedTileX(start.x), level.getPathCorrectedTileY(start.y), level.getPathCorrectedTileX(goal.x), level.getPathCorrectedTileY(goal.y));
+				    } catch (ArrayIndexOutOfBoundsException e){
+                        Log.error("ArrayIndexOutOfBoundsException: " + e.getMessage());
+                        path = null;
+                    }
+                }
 			}
 
 			if(lastPath != null){
@@ -89,7 +96,7 @@ public class EnemyEntity extends BaseEntity {
 	@Override
 	public void onCollision(BaseEntity with) {
 		if(with instanceof PlayerEntity){
-			dealDamage(this, 10);
+			dealDamage(with, 10);
 		}
 	}
 }

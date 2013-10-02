@@ -85,7 +85,8 @@ public class BaseEntity implements Mover{
 		anims = new Animation[ANIM_MAX];
 		pathFinder = new AStarPathFinder(level, 500, true);
 
-		health = 100;
+        maxHealth = 100;
+		health = maxHealth;
 		width = 32;
 		height = 32;
 		movement = new Vector2f(0,0);
@@ -97,7 +98,15 @@ public class BaseEntity implements Mover{
 	public void init() throws IOException {
 	}
 
-	/**
+    public double getMaxHealth() {
+        return maxHealth;
+    }
+
+    public double getHealth() {
+        return health;
+    }
+
+    /**
 	 * sets the movement to (x,y) and normalizes it
 	 * @param x
 	 * @param y
@@ -186,6 +195,11 @@ public class BaseEntity implements Mover{
 	public boolean isDead(){
 		return health <= 0;
 	}
+
+
+    public boolean shouldBeLoaded(){
+        return !isDead() && Math.abs(this.x - level.getEngine().getPlayer().x) < Engine.SCREEN_WIDTH  && Math.abs(this.y - level.getEngine().getPlayer().y) < Engine.SCREEN_HEIGHT ;
+    }
 
 	/**
 	 * gets Called when receives Damage
