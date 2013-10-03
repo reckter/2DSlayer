@@ -9,6 +9,7 @@ package me.reckter.Entity.Modifyer;
  */
 public class BaseModifier {
     protected int timeToLive;
+    protected boolean diesAfterTime;
 
     protected double flatModifier; // just gets added;
     protected double percentageModifier; //gets multiplied so +10% is 1.1
@@ -75,7 +76,16 @@ public class BaseModifier {
     }
 
 
-    public void update(int delta){
+    public boolean isActive(){
+        if(diesAfterTime){
+            return timeToLive > 0;
+        }
+        return true;
+    }
 
+    public void update(int delta){
+        if(diesAfterTime){
+            timeToLive -= delta;
+        }
     }
 }

@@ -3,6 +3,8 @@ package me.reckter.Entity;
 import me.reckter.Engine.Animation;
 import me.reckter.Engine.Engine;
 import me.reckter.Entity.Ability.BaseAbility;
+import me.reckter.Entity.Modifyer.BaseModifier;
+import me.reckter.Entity.Modifyer.ModifierHandler;
 import me.reckter.Interface.BaseText;
 import me.reckter.Interface.DamageText;
 import me.reckter.Level.BaseLevel;
@@ -73,6 +75,8 @@ public class BaseEntity implements Mover{
     protected BaseAbility[] abilities;
     protected static int MAX_ABILITIES = 4;
 
+    protected ModifierHandler modifiers;
+
 	protected AStarPathFinder pathFinder;
 	protected Path path;
 
@@ -89,6 +93,7 @@ public class BaseEntity implements Mover{
 		movement = new Vector2f(0,0);
 
         abilities = new BaseAbility[MAX_ABILITIES];
+        modifiers = new ModifierHandler();
 	}
 
     public BaseEntity(BaseLevel level, int x, int y){
