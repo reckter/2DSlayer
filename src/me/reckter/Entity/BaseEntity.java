@@ -4,6 +4,7 @@ import me.reckter.Engine.Animation;
 import me.reckter.Engine.Engine;
 import me.reckter.Entity.Ability.BaseAbility;
 import me.reckter.Entity.Modifyer.BaseModifier;
+import me.reckter.Entity.Modifyer.HealthModifier;
 import me.reckter.Entity.Modifyer.ModifierHandler;
 import me.reckter.Interface.BaseText;
 import me.reckter.Interface.DamageText;
@@ -65,8 +66,11 @@ public class BaseEntity implements Mover{
 	public int walking;
 	public int attack;
 
-	protected double health;
-	protected double maxHealth;
+
+    protected double maxHealthOrigin;
+
+    protected double health; // percentage of maxHealth (0.0 to 1.0)
+    protected double maxHealth;
 
 	protected BaseEntity target;
 
@@ -86,14 +90,15 @@ public class BaseEntity implements Mover{
 		anims = new Animation[ANIM_MAX];
 		pathFinder = new AStarPathFinder(level, 500, true);
 
-        maxHealth = 100;
-		health = maxHealth;
+        maxHealth = 100;;
 		width = 32;
 		height = 32;
 		movement = new Vector2f(0,0);
 
         abilities = new BaseAbility[MAX_ABILITIES];
         modifiers = new ModifierHandler();
+        health = 1.0;
+        modifiers.add(new HealthModifier(20 * 1000,30,1));
 	}
 
     public BaseEntity(BaseLevel level, int x, int y){
@@ -109,11 +114,11 @@ public class BaseEntity implements Mover{
 	}
 
     public double getMaxHealth() {
-        return maxHealth;
+        return modifiers.getHealth(maxHealth);
     }
 
     public double getHealth() {
-        return health;
+        return health * getMaxHealth();
     }
 
     /**
@@ -203,7 +208,7 @@ public class BaseEntity implements Mover{
 	 * @return true in case of death
 	 */
 	public boolean isDead(){
-		return health <= 0;
+		return health == 0;
 	}
 
 
@@ -216,7 +221,7 @@ public class BaseEntity implements Mover{
 	 * @param from the damage dealer
 	 */
 	public void onDamage(BaseEntity from, double dmg){
-		health -= dmg;
+		health = (getHealth() - dmg) / getMaxHealth();
 		level.add(new DamageText(level.getEngine(), (int) dmg, this));
 		if(isDead()){
 			onDeath(from);
@@ -239,7 +244,7 @@ public class BaseEntity implements Mover{
 	 */
 	public void dealDamage(BaseEntity to, double dmg){
 		if(cooldown <= 0){
-			to.onDamage(this, dmg);
+			to.onDamage(this, modifiers.getDamage(dmg));
 			cooldown = MAX_COOLDOWN;
 		}
 	}
@@ -267,10 +272,12 @@ public class BaseEntity implements Mover{
 	public void update(int delta){
 		updateAnimation();
 
+        modifiers.update(delta);
+
 		Vector2f tmp = new Vector2f(movement);
 		tmp.scale((float) delta / 1000);
-		x += tmp.x * speed;
-		y += tmp.y * speed;
+		x += tmp.x * modifiers.getSpeed(speed);
+		y += tmp.y * modifiers.getSpeed(speed);
 
 		if(cooldown > 0){
 			cooldown -= delta;

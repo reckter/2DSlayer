@@ -12,6 +12,10 @@ import java.util.ArrayList;
 public class ModifierHandler {
     protected ArrayList<BaseModifier> modifiers;
 
+    public ModifierHandler(){
+        modifiers = new ArrayList<BaseModifier>();
+    }
+
     public void add(BaseModifier modifier){
         modifiers.add(modifier);
     }

@@ -18,6 +18,7 @@ public class BaseModifier {
         this.timeToLive = timeToLive;
         this.flatModifier = flatModifier;
         this.percentageModifier = percentageModifier;
+        this.diesAfterTime = true;
     }
 
 

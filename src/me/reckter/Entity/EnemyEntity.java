@@ -1,6 +1,7 @@
 package me.reckter.Entity;
 
 import me.reckter.Engine.Engine;
+import me.reckter.Entity.Modifyer.DamageModifier;
 import me.reckter.Interface.Coordinates;
 import me.reckter.Interface.DamageText;
 import me.reckter.Level.BaseLevel;
@@ -35,6 +36,7 @@ public class EnemyEntity extends BaseEntity {
 		loadObject("twilight");
 		speed = 60;
 		target = level.getEngine().getPlayer();
+        modifiers.add(new DamageModifier(10 * 1000, 0, 2));
 
 	}
 
