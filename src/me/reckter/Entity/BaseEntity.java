@@ -2,6 +2,7 @@ package me.reckter.Entity;
 
 import me.reckter.Engine.Animation;
 import me.reckter.Engine.Engine;
+import me.reckter.Entity.Ability.BaseAbility;
 import me.reckter.Interface.BaseText;
 import me.reckter.Interface.DamageText;
 import me.reckter.Level.BaseLevel;
@@ -17,6 +18,8 @@ import org.newdawn.slick.util.pathfinding.Path;
 
 import java.awt.font.GraphicAttribute;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,9 +57,7 @@ public class BaseEntity implements Mover{
 
 	protected Vector2f movement;
 
-	protected BaseLevel level;
-
-	protected PlayerEntity player;
+	public BaseLevel level;
 
 	public int facing;
 	public int walking;
@@ -69,16 +70,12 @@ public class BaseEntity implements Mover{
 
 	protected Animation anims[];
 
+    protected BaseAbility[] abilities;
+    protected static int MAX_ABILITIES = 4;
 
 	protected AStarPathFinder pathFinder;
 	protected Path path;
 
-
-	public BaseEntity(BaseLevel level, int x, int y){
-		this(level);
-		this.x = x;
-		this.y = y;
-	}
 
 	public BaseEntity(BaseLevel level){
 		this.level = level;
@@ -90,7 +87,15 @@ public class BaseEntity implements Mover{
 		width = 32;
 		height = 32;
 		movement = new Vector2f(0,0);
+
+        abilities = new BaseAbility[MAX_ABILITIES];
 	}
+
+    public BaseEntity(BaseLevel level, int x, int y){
+        this(level);
+        this.x = x;
+        this.y = y;
+    }
 
 	/**
 	 * initialized the entity
