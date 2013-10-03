@@ -79,7 +79,7 @@ public class BaseEntity implements Mover{
     protected BaseAbility[] abilities;
     protected static int MAX_ABILITIES = 4;
 
-    protected ModifierHandler modifiers;
+    public ModifierHandler modifiers;
 
 	protected AStarPathFinder pathFinder;
 	protected Path path;
@@ -99,6 +99,7 @@ public class BaseEntity implements Mover{
         modifiers = new ModifierHandler();
         health = 1.0;
         modifiers.add(new HealthModifier(20 * 1000,30,1));
+        modifiers.add(new HealthModifier(10 * 1000,0,2));
 	}
 
     public BaseEntity(BaseLevel level, int x, int y){
@@ -118,7 +119,7 @@ public class BaseEntity implements Mover{
     }
 
     public double getHealth() {
-        return health * getMaxHealth();
+        return health * getMaxHealth() ;
     }
 
     /**
@@ -208,7 +209,7 @@ public class BaseEntity implements Mover{
 	 * @return true in case of death
 	 */
 	public boolean isDead(){
-		return health == 0;
+		return health <=  0;
 	}
 
 
@@ -222,6 +223,12 @@ public class BaseEntity implements Mover{
 	 */
 	public void onDamage(BaseEntity from, double dmg){
 		health = (getHealth() - dmg) / getMaxHealth();
+        if(health <= 0){
+            health = 0;
+        }
+        if(health >= 1){
+            health = 1;
+        }
 		level.add(new DamageText(level.getEngine(), (int) dmg, this));
 		if(isDead()){
 			onDeath(from);

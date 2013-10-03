@@ -1,6 +1,7 @@
 package me.reckter.Engine;
 
 import com.ilusionary.IxxFile.IxxFile;
+import me.reckter.Entity.Modifyer.Dot;
 import me.reckter.Entity.PlayerEntity;
 import me.reckter.Level.BaseLevel;
 import me.reckter.Level.Generation.BaseGeneration;
@@ -151,6 +152,7 @@ public class Engine extends BasicGame{
 		level = new BaseLevel(this, new BaseGeneration());
 		player = new PlayerEntity(level);
 		level.spawnPlayer(player);
+        player.modifiers.add(new Dot(player, player, 30 * 1000, -10));
 
 		try{
 			level.init();

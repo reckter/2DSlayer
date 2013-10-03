@@ -2,6 +2,7 @@ package me.reckter.Entity;
 
 import me.reckter.Engine.Engine;
 import me.reckter.Entity.Modifyer.DamageModifier;
+import me.reckter.Entity.Modifyer.Dot;
 import me.reckter.Interface.Coordinates;
 import me.reckter.Interface.DamageText;
 import me.reckter.Level.BaseLevel;
@@ -95,7 +96,15 @@ public class EnemyEntity extends BaseEntity {
 		super.update(delta);
 	}
 
-	@Override
+    @Override
+    public void dealDamage(BaseEntity to, double dmg) {
+        if(cooldown <= 0){
+            to.modifiers.add(new Dot(to, this, 10 * 1000, 1));
+            cooldown = MAX_COOLDOWN;
+        }
+    }
+
+    @Override
 	public void onCollision(BaseEntity with) {
 		if(with instanceof PlayerEntity){
 			dealDamage(with, 10);

@@ -39,7 +39,12 @@ public class HealthBar extends BaseHudItem {
 
     @Override
     public void update(int delta) {
+        maxHealth = engine.getPlayer().getMaxHealth();
         health = engine.getPlayer().getHealth();
+
+        if(healthDisplayed >= maxHealth){
+            healthDisplayed = maxHealth;
+        }
         healthDisplayed += (health - healthDisplayed) / (800 / delta);
     }
 
