@@ -63,6 +63,14 @@ public class TilesHandler {
 		}
 		tiles = temp;
 	}
+	
+	public void update(int delta){
+		Iterator<Map.Entry<String,BaseTile>> iterator = tiles.entrySet().iterator();
+		while(iterator.hasNext()){
+			iterator.next().getValue().update(delta);
+		}
+
+	}
 
 	public void render(Graphics g){
 		Iterator<Map.Entry<String,BaseTile>> iterator = tiles.entrySet().iterator();

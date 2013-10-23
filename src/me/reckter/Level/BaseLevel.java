@@ -8,6 +8,7 @@ import me.reckter.Interface.BaseInterface;
 import me.reckter.Interface.FPSlabel;
 import me.reckter.Interface.HealthBar;
 import me.reckter.Level.Generation.BaseGeneration;
+import me.reckter.Level.Tiles.BaseTile;
 import me.reckter.Level.Tiles.TilesHandler;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.util.pathfinding.Mover;
@@ -120,10 +121,24 @@ public class BaseLevel implements TileBasedMap{
 					entities.get(j).onCollision(entities.get(i));
 				}
 			}
+			
+			BaseTile standingOnTile = entities.get(i).findTile();
+			for(int x = standingOnTile.x - (int) (entities.get(i).width / Engine.SPRITE_SIZE + 0.5); x <= standingOnTile.x + (int) (entities.get(i).width / Engine.SPRITE_SIZE + 0.5); x++){
+				for(int y = standingOnTile.y - (int) (entities.get(i).width / Engine.SPRITE_SIZE + 0.5); y <= standingOnTile.y + (int) (entities.get(i).width / Engine.SPRITE_SIZE + 0.5); y++){
+					
+					BaseTile with = tiles.getTile(x, y);
+					if(entities.get(i).checkColl(with)){
+						entities.get(i).onCollision(with);
+						with.onCollision(entities.get(i));
+					}
+				}
+			}
 		}
 		if(updates % 10 == 0){
 			tiles.manageTiles((int) engine.getPlayer().x / Engine.SPRITE_SIZE, (int) engine.getPlayer().y / Engine.SPRITE_SIZE, loadingRadiusX, loadingRadiusY);
 		}
+		
+		tiles.update(delta);
 
 		ArrayList<BaseInterface> tempColl = new ArrayList<BaseInterface>();
 		for(BaseInterface face: interfaces){

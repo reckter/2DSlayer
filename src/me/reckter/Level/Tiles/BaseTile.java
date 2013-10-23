@@ -42,7 +42,7 @@ public class BaseTile {
 
 	/**
 	 * gets the Collision box of the tile
-	 * @return Rectangle descibing the tile
+	 * @return Rectangle describing the tile
 	 */
 	public Rectangle getCollisionBox(){
 		return new Rectangle(x, y, Engine.SPRITE_SIZE, Engine.SPRITE_SIZE);
@@ -63,6 +63,22 @@ public class BaseTile {
 	 */
 	public boolean checkColl(BaseEntity with) {
 		return Util.checkColl(getCollisionBox(), with.getCollisionBox());
+	}
+	
+	/**
+	 * gets called if a Entity is colliding with this tile
+	 * @param with the entity the tile is colliding with
+	 */
+	public void onCollision(BaseEntity with){
+		
+	}
+	
+	/**
+	 * gets called every update cycle
+	 * @param delta the milliseconds since the last update
+	 */
+	public void update(int delta){
+		
 	}
 
 	/**

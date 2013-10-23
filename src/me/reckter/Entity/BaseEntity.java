@@ -234,6 +234,24 @@ public class BaseEntity implements Mover{
 			onDeath(from);
 		}
 	}
+	
+	/**
+	 * gets Called when receives Damage
+	 * @param from the tile that deals the damage
+	 */
+	public void onDamage(BaseTile from, double dmg){
+		health = (getHealth() - dmg) / getMaxHealth();
+        if(health <= 0){
+            health = 0;
+        }
+        if(health >= 1){
+            health = 1;
+        }
+		level.add(new DamageText(level.getEngine(), (int) dmg, this));
+		if(isDead()){
+			onDeath(from);
+		}
+	}
 
 	/**
 	 * gets called from onDamage if the entity just dies
@@ -243,7 +261,14 @@ public class BaseEntity implements Mover{
 		Log.verbose(this.getClass().getCanonicalName() + " just died!");
 	}
 
-
+	/**
+	 * gets called from onDamage if the entity just dies
+	 * @param killer the tile that dealt the last dmg
+	 */
+	public void onDeath(BaseTile killer){
+		Log.verbose(this.getClass().getCanonicalName() + " just died!");
+	}
+	
 	/**
 	 * checks basic attack cooldown and calls to.onDamage() if no cooldown
 	 * @param to Entity to damage
