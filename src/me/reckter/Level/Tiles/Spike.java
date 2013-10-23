@@ -13,6 +13,8 @@ public class Spike extends PassableTile {
 		lastDamage = 0;
 	}
 	
+	//asdasdasdasdf
+	
 	@Override 
 	public void onCollision(BaseEntity with){
 		if(lastDamage <= 0) {
